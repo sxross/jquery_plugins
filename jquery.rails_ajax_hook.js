@@ -32,7 +32,8 @@ jQuery.fn.ajaxLinkBind = function(options){
         'authenticity_token': $('input[name=authenticity_token]').val()
       },
       dataType: 'json',
-      success: function(json){options['success'](json);}
+      success: function(json){options['success'](json);},
+      error:   function(json){options['error'](json);}
     });
     return false;
   });
