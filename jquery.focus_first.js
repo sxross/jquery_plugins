@@ -17,8 +17,10 @@
 //
 // http://calicowebdev.com
 
-jQuery.fn.focusFirstInput = function(){
-  // If there's a form on the page, then set focus to the first visible input element
-  e = $('form input:visible')
-  if(e && e.get(0)){e.get(0).focus();}  
-}
+(function($) {
+  jQuery.fn.focusFirstInput = function(){
+    // If there's a form on the page, then set focus to the first visible input element
+    var e = $('form input:visible')
+    if(e && e.get(0)){e.get(0).focus();}  
+  }
+}) (jQuery);

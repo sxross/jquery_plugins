@@ -21,20 +21,22 @@
 //
 // http://calicowebdev.com
 
-jQuery.fn.ajaxLinkBind = function(options){
-  var ajaxLinkBindOptions = $.extend({}, options);
-  this.bind('click', function(e){
-    element = $(this).find('a');
-    $.ajax({
-      type: "POST",
-      url:  element.attr('href'),
-      data: {
-        'authenticity_token': $('input[name=authenticity_token]').val()
-      },
-      dataType: 'json',
-      success: function(json){options['success'](json);},
-      error:   function(json){options['error'](json);}
+(function($) {
+  jQuery.fn.ajaxLinkBind = function(options){
+    var ajaxLinkBindOptions = $.extend({}, options);
+    this.bind('click', function(e){
+      element = $(this).find('a');
+      $.ajax({
+        type: "POST",
+        url:  element.attr('href'),
+        data: {
+          'authenticity_token': $('input[name=authenticity_token]').val()
+        },
+        dataType: 'json',
+        success: function(json){options['success'](json);},
+        error:   function(json){options['error'](json);}
+      });
+      return false;
     });
-    return false;
-  });
-}
+  }
+}) (jQuery);

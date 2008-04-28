@@ -1,0 +1,66 @@
+README For jquery.focus_first.js, jquery.rails_ajax_hook.js
+
+You can clone them by doing:
+
+git clone git://github.com/sxross/jquery_plugins.git
+       
+That way, you get all the goodness of git and the plugins to boot! But if you don't use or want git, just grab the files, and off you go!
+
+focusFirst
+==========
+        
+This simply sets the focus on the first INPUT element in a form (not TEXTAREA), if such a form exists. Usage:
+
+      $(document).ready(function(){
+        $(this).focusFirstInput();
+      }
+        
+That’s it!
+
+ajaxLinkBind
+============
+
+This one is more complicated. Its purpose is to bind to an 'a' element and invoke some Ajax action in a Rails controller. Why?
+
+- So you can specify your URL in an A tag where it's supposed to be
+- So browsers that don't have Javascript enabled can still interact with your site
+- So you can Ajaxify a whole set of links in one fell swoop
+
+Here’s how it works.
+
+(X)HTML. Note that the form_tag do stuff is so Rails can insert the forgery protection field. ITW: Making forgery protection optional.
+
+          <% form_tag do -%>
+            <div class='linkable-by-ajax'>
+              hey <a href="/some/place">click here</a>.
+              <span id="update-me"></span>
+            </div>
+          <% end -%>
+        
+Clearly, this is just a chunk of HTML that links using an HTTP GET request, right? But add the following Javascript and this plugin:
+
+           $('.linkable-by-ajax').ajaxLinkBind(
+           {
+              success: function(json){
+                  $('#update-me').html(json['results']);
+                }
+           });
+        
+...and presto! You have Ajax. The GET implied by the link is replaced by an Ajax POST with an Accept-Type of Application/json, and the response is interpreted as JSON. Because the options hash maps directly onto the options hash of $.ajax(), you can use any of the options available, although I would recommend constraining yourself to dealing with success and error. Additionally, because this is designed to decay gracefully into an HTTP GET if Javascript is not enabled, stuffing things into data is a "really bad idea."
+
+Finally, a word about your Rails controller. Use a snippet like this:
+
+           def my_method
+            respond_to do |wants|
+              # Expected case, the Ajax request. Just set the JSON variable "results" and let the Javascript render it.
+              wants.json {
+                render :json => {:results => 'the magic number is 42!'}
+              }
+              # Downlevel result where browser Javascript is turned off. Set the flash to our message and go back
+              # whence we came.
+              wants.html {
+                flash['info'] = 'the magic number is 42!'
+                redirect_to request.referer
+              }
+            end
+          end
