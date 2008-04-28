@@ -24,16 +24,15 @@
 (function($) {
   jQuery.fn.ajaxLinkBind = function(options){
     this.bind('click', function(e){
-      var form_data, element = $(this).find('a');
-      if !var throw "container does not have an 'a' element";
-      if $('form').length > 0 {
+      var form_data = '', element = $(this).find('a');
+      if(!element) throw("container does not have an 'a' element");
+      if($('form').length > 0) {
         form_data = $('form').serialize();
       }
-      form_data ||= '';
       $.ajax($.extend({
         type: "POST",
         url:  element.attr('href'),
-        data: form_data
+        data: form_data,
         dataType: 'json'
       }, options));
       return false;
