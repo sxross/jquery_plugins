@@ -24,13 +24,16 @@
 (function($) {
   jQuery.fn.ajaxLinkBind = function(options){
     this.bind('click', function(e){
-      var element = $(this).find('a');
+      var form_data, element = $(this).find('a');
+      if !var throw "container does not have an 'a' element";
+      if $('form').length > 0 {
+        form_data = $('form').serialize();
+      }
+      form_data ||= '';
       $.ajax($.extend({
         type: "POST",
         url:  element.attr('href'),
-        data: {
-          'authenticity_token': $('input[name=authenticity_token]').val()
-        },
+        data: form_data
         dataType: 'json'
       }, options));
       return false;
