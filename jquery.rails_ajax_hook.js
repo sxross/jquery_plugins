@@ -23,17 +23,15 @@
 
 (function($) {
   jQuery.fn.ajaxLinkBind = function(options){
-    this.bind('click', function(e)extend({
+    this.bind('click', function(e){
       var element = $(this).find('a');
-      $.ajax({
+      $.ajax($.extend({
         type: "POST",
         url:  element.attr('href'),
         data: {
           'authenticity_token': $('input[name=authenticity_token]').val()
         },
-        dataType: 'json',
-        success: function(json){options['success'](json);},
-        error:   function(json){options['error'](json);}
+        dataType: 'json'
       }, options));
       return false;
     });
