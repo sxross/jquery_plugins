@@ -23,9 +23,8 @@
 
 (function($) {
   jQuery.fn.ajaxLinkBind = function(options){
-    var ajaxLinkBindOptions = $.extend({}, options);
-    this.bind('click', function(e){
-      element = $(this).find('a');
+    this.bind('click', function(e)extend({
+      var element = $(this).find('a');
       $.ajax({
         type: "POST",
         url:  element.attr('href'),
@@ -35,7 +34,7 @@
         dataType: 'json',
         success: function(json){options['success'](json);},
         error:   function(json){options['error'](json);}
-      });
+      }, options));
       return false;
     });
   }
